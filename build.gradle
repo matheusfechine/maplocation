@@ -1,0 +1,167 @@
+apply plugin:'java'
+apply plugin:'jetty'
+apply plugin:'eclipse-wtp'
+apply plugin:'war'
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+archivesBaseName = "maplocation"
+version = "0.0.1"
+
+
+repositories {
+	mavenCentral()
+}
+
+sourceSets {
+	test {
+		java {
+			srcDir "src/test/integration"
+			srcDir "src/test/unit"
+		}
+		resources {
+			srcDir "src/test/resource"
+			srcDir "src/main/resources"
+			srcDir "src/test/integration"
+			srcDir "src/test/unit" 
+		}
+	}
+}
+
+def springDependencies = [
+	"spring-core",
+	"spring-context",
+	"spring-context-support",
+	"spring-aop",
+	"spring-aspects",
+	"spring-beans",
+	"spring-jdbc",
+	"spring-web",
+	"spring-asm",
+	"spring-test",
+	"spring-orm"
+]
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmm')
+    return formattedDate
+}
+
+configurations { emma }
+
+dependencies {
+	emma "emma:emma:2.0.5312"
+	emma "emma:emma_ant:2.0.5312"
+
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+dependencies{
+	springDependencies.each {
+		compile group:"org.springframework", name: it, version:"3.1.4.RELEASE"
+	}
+	compile group:"br.com.caelum", name: "vraptor", version: "3.5.1"
+	compile group:"org.dbunit", name:"dbunit", version:"2.5.0"
+	compile group:"org.hibernate", name:"hibernate-core", version:"4.3.6.Final"
+	compile group:"org.hibernate", name:"hibernate-entitymanager", version:"4.3.6.Final"
+	compile group:"org.slf4j", name:"slf4j-api", version:"1.7.5"
+	compile group:"org.aspectj", name: "aspectjrt", version: "1.7.2"
+	compile group:"org.aspectj", name: "aspectjweaver", version: "1.7.2"
+	compile group:"opensymphony", name:"sitemesh", version:"2.4.2"
+	compile group:"mysql", name: "mysql-connector-java", version:"5.1.33"
+	
+	compile group:"org.codehaus.jettison", name:"jettison", version:"1.3"
+	compile fileTree(dir: "${webAppDirName}/WEB-INF/lib", include: "*.jar")
+	compile 'org.codehaus.jettison:jettison:1.3.4'
+
+	providedCompile "javax.servlet:servlet-api:2.5"
+	runtime "javax.servlet:jstl:1.1.2"
+	runtime "taglibs:standard:1.1.2"
+
+	testCompile group:"org.mockito", name:"mockito-all", version:"1.9.5"
+	testCompile group:"junit", name:"junit", version:"4.11"
+	testCompile group:"org.hamcrest", name:"hamcrest-library", version:"1.3"
+	testCompile group:"org.hamcrest", name:"hamcrest-core", version:"1.3"
+}
+
+test {
+	// add EMMA related JVM args to our tests
+	jvmArgs "-XX:-UseSplitVerifier", "-Demma.coverage.out.file=$buildDir/tmp/emma/metadata.emma", "-Demma.coverage.out.merge=true"
+
+	doFirst {
+		println "Instrumenting the classes at " + sourceSets.main.output.classesDir.absolutePath
+		// define the custom EMMA ant tasks
+		ant.taskdef( resource:"emma_ant.properties", classpath: configurations.emma.asPath)
+
+		ant.path(id:"run.classpath") {
+			pathelement(location:sourceSets.main.output.classesDir.absolutePath)
+		}
+		def emmaInstDir = new File(sourceSets.main.output.classesDir.parentFile.parentFile, "tmp/emma/instr")
+		emmaInstDir.mkdirs()
+		println "Creating $emmaInstDir to instrument from " +       sourceSets.main.output.classesDir.absolutePath
+		// instruct our compiled classes and store them at $buildDir/tmp/emma/instr
+		ant.emma(enabled: 'true', verbosity:'info'){
+			instr(merge:"true", destdir: emmaInstDir.absolutePath, instrpathref:"run.classpath",
+			metadatafile: new File(emmaInstDir, '/metadata.emma').absolutePath) {
+				instrpath {
+					fileset(dir:sourceSets.main.output.classesDir.absolutePath, includes:"**/*.class")
+				}
+			}
+		}
+		setClasspath(files("$buildDir/tmp/emma/instr") + configurations.emma +    getClasspath())
+	}
+
+	// The report should be generated directly after the tests are done.
+	// We create three types (txt, html, xml) of reports here. Running your build script now should
+	// result in output like that:
+	doLast {
+		def srcDir = sourceSets.main.java.srcDirs.toArray()[0]
+		println "Creating test coverage reports for classes " + srcDir
+		def emmaInstDir = new File(sourceSets.main.output.classesDir.parentFile.parentFile, "tmp/emma")
+		ant.emma(enabled:"true"){
+			new File("$buildDir/reports/emma").mkdirs()
+			report(sourcepath: srcDir){
+				fileset(dir: emmaInstDir.absolutePath){ include(name:"**/*.emma") }
+				txt(outfile:"$buildDir/reports/emma/coverage.txt")
+				html(outfile:"$buildDir/reports/emma/coverage.html")
+				xml(outfile:"$buildDir/reports/emma/coverage.xml")
+			}
+		}
+		println "Test coverage reports available at $buildDir/reports/emma."
+		println "txt: $buildDir/reports/emma/coverage.txt"
+		println "Test $buildDir/reports/emma/coverage.html"
+		println "Test $buildDir/reports/emma/coverage.xml"
+	}
+}
+
+task "create-dirs" << {
+	sourceSets*.java.srcDirs*.each { it.mkdirs() }
+	sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.6'
+}
+
+war {
+	archiveName baseName + '##' + version + '-' + getDate() + '.war'
+	doFirst {
+		copy {
+	        from "${webAppDir}/WEB-INF/web.xml"
+	        into "${buildDir}"
+	    }
+	    javaexec {
+		    main = 'br.com.caelum.vraptor.scan.VRaptorStaticScanning'
+		    classpath = sourceSets.main.runtimeClasspath
+		    args "${buildDir}/web.xml"
+		}
+		copy {
+	        from "${buildDir}/classes/br/com/caelum/vraptor/generated/StaticProjectBootstrap.class"
+	        into "${buildDir}/classes/main/br/com/caelum/vraptor/generated/"
+	    }
+	    
+	    delete "${buildDir}/classes/br"
+	    delete "${buildDir}/web.xml"
+    }
+}
