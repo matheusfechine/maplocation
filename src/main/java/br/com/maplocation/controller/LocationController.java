@@ -50,9 +50,9 @@ public class LocationController {
 	}
 
 	@Get
-	@Path("/atualiza/{id}")
-	public void atualiza(Integer id) {
-		service.atualiza(id);
+	@Path("/atualiza")
+	public void atualiza(Location location) {
+		service.atualiza(location);
 		result.include("sucesso", "Location Atualizado com Sucesso!");
 	}
 

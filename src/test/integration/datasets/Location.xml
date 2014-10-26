@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<location />
+	<location id="1"
+			  created="2014-10-25 00:00:00"
+			  latitude="3.222"
+			  longitude="2.222"
+			  nome="Teste 1"/>
+	<location id="2"
+			  created="2014-10-25 01:00:00"
+			  latitude="4.444"
+			  longitude="5.555"
+			  nome="Teste 2"/>
 </dataset>

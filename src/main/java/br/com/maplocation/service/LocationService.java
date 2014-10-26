@@ -1,5 +1,6 @@
 package br.com.maplocation.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -20,14 +21,20 @@ public class LocationService {
 		entityManager.persist(location);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Location> lista() {
-		return null;
+		String hql = "from Location";
+		Query query = entityManager.createQuery(hql);
+		return (ArrayList<Location>)query.getResultList();
 	}
 
-	public void atualiza(Integer id) {
+	public void atualiza(Location location) {
+		entityManager.merge(location);
 	}
 
 	public void exclui(Integer id) {
+		Location location = entityManager.find(Location.class, id);
+		entityManager.remove(location);
 	}
 
 	public Location obtem(Location location) {

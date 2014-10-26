@@ -42,6 +42,8 @@ def springDependencies = [
 	"spring-orm"
 ]
 
+def hibernateDependencies = ["hibernate-core", "hibernate-entitymanager"]
+
 def getDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmm')
@@ -57,9 +59,13 @@ dependencies {
 	testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
+
 dependencies{
 	springDependencies.each {
 		compile group:"org.springframework", name: it, version:"3.1.4.RELEASE"
+	}
+	hibernateDependencies.each {
+		compile "org.hibernate:${it}:4.1.5.Final"
 	}
 	compile group:"br.com.caelum", name: "vraptor", version: "3.5.1"
 	compile group:"org.dbunit", name:"dbunit", version:"2.5.0"

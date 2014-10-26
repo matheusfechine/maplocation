@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="location")
@@ -26,6 +28,7 @@ public class Location {
 	private String name;
 	
 	@Column(name="created")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 
 	public Integer getId() {
@@ -71,14 +74,13 @@ public class Location {
 	@Override
 	public String toString() {
 		return "Location [latitude=" + latitude + ", longitude=" + longitude
-				+ ", name=" + name + ", created=" + created + "]";
+				+ ", name=" + name + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result
 				+ ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result
@@ -96,11 +98,6 @@ public class Location {
 		if (getClass() != obj.getClass())
 			return false;
 		Location other = (Location) obj;
-		if (created == null) {
-			if (other.created != null)
-				return false;
-		} else if (!created.equals(other.created))
-			return false;
 		if (latitude == null) {
 			if (other.latitude != null)
 				return false;

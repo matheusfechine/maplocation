@@ -20,10 +20,10 @@
 	
 	 <bean id="dataSource"
 		class="org.springframework.jdbc.datasource.SingleConnectionDataSource" >
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/maplocationtest" />
-		<property name="username" value="root" />
-		<property name="password" value="root" />
+		<property name="driverClassName" value="${banco.driver}" />
+		<property name="url" value="${banco.url}" />
+		<property name="username" value="${banco.usuario}" />
+		<property name="password" value="${banco.senha}" />
 		<property name="suppressClose" value="true" />
 	 </bean>
 	

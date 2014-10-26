@@ -63,8 +63,8 @@ public class LocationControllerTest {
 	
 	@Test
 	public void deveriaEditarUmaLocation(){
-		controller.atualiza(1);
-		verify(service).atualiza(1);
+		controller.atualiza(location());
+		verify(service).atualiza(location());
 		assertEquals("Location Atualizado com Sucesso!", result.included().get("sucesso"));
 	}
 	
