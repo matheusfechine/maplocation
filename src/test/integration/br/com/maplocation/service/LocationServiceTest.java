@@ -21,7 +21,8 @@ import br.com.maplocation.model.Location;
 import dbunit.DbUnitManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations= {"classpath:applicationContext-test.xml"})
+@ContextConfiguration(locations= {"classpath:applicationContext-persistence-test.xml", 
+								  "classpath:applicationContext.xml"})
 @Transactional
 public class LocationServiceTest {
 	

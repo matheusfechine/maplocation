@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.maplocation.model.Location;
 
-@Service
+@Service("locationService")
 public class LocationService {
 
 	@PersistenceContext

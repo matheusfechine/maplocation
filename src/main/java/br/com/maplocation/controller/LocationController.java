@@ -1,5 +1,6 @@
 package br.com.maplocation.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.caelum.vraptor.Delete;
@@ -26,6 +27,7 @@ public class LocationController {
 	@Post
 	@Path("/cadastra")
 	public void cadastra(Location location) {
+		location.setCreated(new Date());
 		service.cadastra(location);
 		result.include("sucesso", "Location Cadastrado com Sucesso!");
 		result.redirectTo(this).paginaDeCadastro();
@@ -47,6 +49,7 @@ public class LocationController {
 	@Get
 	@Path("/paginaListagem")
 	public void paginaDeListagem() {
+		lista();
 	}
 
 	@Get
