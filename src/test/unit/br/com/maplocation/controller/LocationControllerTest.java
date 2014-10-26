@@ -43,8 +43,8 @@ public class LocationControllerTest {
 	private Location location() {
 		Location location = new Location();
 		location.setId(1);
-		location.setLatitude(12345L);
-		location.setLongitude(5432L);
+		location.setLatitude(12345D);
+		location.setLongitude(5432D);
 		return location;
 	}
 	

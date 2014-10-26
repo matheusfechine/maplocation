@@ -32,7 +32,7 @@ public class LocationController {
 	}
 
 	@Get
-	@Path("/paginaCadastro")
+	@Path("/")
 	public void paginaDeCadastro() {
 	}
 

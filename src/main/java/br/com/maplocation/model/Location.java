@@ -2,12 +2,30 @@ package br.com.maplocation.model;
 
 import java.util.Date;
 
-public class Location {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="location")
+public class Location {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
-	private Long latitude;
-	private Long longitude;
+	
+	@Column(name="latitude")
+	private Double latitude;
+	
+	@Column(name="longitude")
+	private Double longitude;
+	
+	@Column(name="nome")
 	private String name;
+	
+	@Column(name="created")
 	private Date created;
 
 	public Integer getId() {
@@ -18,19 +36,19 @@ public class Location {
 		this.id = id;
 	}
 
-	public Long getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Long latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 
-	public Long getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Long longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
@@ -52,8 +70,8 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "Location [id=" + id + ", latitude=" + latitude + ", longitude="
-				+ longitude + ", name=" + name + ", created=" + created + "]";
+		return "Location [latitude=" + latitude + ", longitude=" + longitude
+				+ ", name=" + name + ", created=" + created + "]";
 	}
 
 	@Override
@@ -61,7 +79,6 @@ public class Location {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result
@@ -83,11 +100,6 @@ public class Location {
 			if (other.created != null)
 				return false;
 		} else if (!created.equals(other.created))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (latitude == null) {
 			if (other.latitude != null)
