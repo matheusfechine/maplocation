@@ -33,12 +33,12 @@
 		</tx:attributes>
 	</tx:advice>
 	
-	<!-- Configuração do Aspecto das transações. -->
-<!-- 	<aop:config> -->
-<!-- 		<aop:pointcut id="serviceMethods" -->
-<!-- 			expression="execution(* br.com.maplocation.service..*.*(..))" /> -->
-<!-- 		<aop:advisor order="2" advice-ref="txAdvice" -->
-<!-- 			pointcut-ref="serviceMethods" /> -->
-<!-- 	</aop:config> -->
+<!-- 	Configuração do Aspecto das transações. -->
+	<aop:config>
+		<aop:pointcut id="serviceMethods"
+			expression="execution(* br.com.maplocation.service..*.*(..))" />
+		<aop:advisor order="2" advice-ref="txAdvice"
+			pointcut-ref="serviceMethods" />
+	</aop:config>
 	
 </beans>

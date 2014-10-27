@@ -17,18 +17,18 @@ import br.com.maplocation.service.LocationService;
 public class LocationController {
 
 	private Result result;
-	private LocationService service;
+	private LocationService locationService;
 	
-	public LocationController(Result result, LocationService service) {
+	public LocationController(Result result, LocationService locationService) {
 		this.result = result;
-		this.service = service;
+		this.locationService = locationService;
 	}
 	
 	@Post
 	@Path("/cadastra")
 	public void cadastra(Location location) {
 		location.setCreated(new Date());
-		service.cadastra(location);
+		locationService.cadastra(location);
 		result.include("sucesso", "Location Cadastrado com Sucesso!");
 		result.redirectTo(this).paginaDeCadastro();
 	}
@@ -41,7 +41,7 @@ public class LocationController {
 	@Get
 	@Path("/lista")
 	public void lista() {
-		List<Location> locations = service.lista();
+		List<Location> locations = locationService.lista();
 		result.include("locations", locations);
 		
 	}
@@ -55,14 +55,14 @@ public class LocationController {
 	@Get
 	@Path("/atualiza")
 	public void atualiza(Location location) {
-		service.atualiza(location);
+		locationService.atualiza(location);
 		result.include("sucesso", "Location Atualizado com Sucesso!");
 	}
 
 	@Delete
 	@Path("/exclui/{id}")
 	public void exclui(Integer id) {
-		service.exclui(id);
+		locationService.exclui(id);
 		result.include("sucesso", "Location Excluído com Sucesso!");
 	}
 

@@ -13,7 +13,6 @@
 	<context:annotation-config />
 	<context:component-scan base-package="br.com.maplocation" />
 	<tx:annotation-driven/>	
-	
 	 <bean id="dataSource"
 		class="org.springframework.jdbc.datasource.SingleConnectionDataSource" >
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
