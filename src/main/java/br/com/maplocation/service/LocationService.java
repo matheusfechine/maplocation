@@ -8,9 +8,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maplocation.model.Location;
-
+@Transactional
 @Service("locationService")
 public class LocationService {
 
@@ -22,6 +23,7 @@ public class LocationService {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Transactional(readOnly=true)
 	public List<Location> lista() {
 		String hql = "from Location";
 		Query query = entityManager.createQuery(hql);
@@ -37,6 +39,7 @@ public class LocationService {
 		entityManager.remove(location);
 	}
 
+	@Transactional(readOnly=true)
 	public Location obtem(Location location) {
 		String hql = "from Location where name = :name";
 		Query query = entityManager.createQuery(hql);

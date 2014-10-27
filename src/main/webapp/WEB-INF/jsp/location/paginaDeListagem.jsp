@@ -21,7 +21,7 @@
 					<c:forEach items="${locations}" var="location" >
 						<tr>
 							<td>${location.id}</td>
-							<td>${location.nome}</td>
+							<td>${location.name}</td>
 							<td>${location.latitude}</td>
 							<td>${location.longitude}</td>
 							<td>${location.created}</td>
