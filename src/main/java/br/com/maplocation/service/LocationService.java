@@ -39,6 +39,10 @@ public class LocationService {
 		entityManager.remove(location);
 	}
 
+	public Location obtemPor(Integer id){
+		return entityManager.find(Location.class, id);
+	}
+	
 	@Transactional(readOnly=true)
 	public Location obtem(Location location) {
 		String hql = "from Location where name = :name";

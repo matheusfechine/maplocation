@@ -115,4 +115,10 @@ public class LocationServiceTest {
 		assertEquals("Data", dateFormat.format(asDate("25/10/2014 01:00:00")), dateFormat.format(todasLocations.get(0).getCreated()));
 	}
 	
+	@Test
+	public void deveriaPesquisarPorId(){
+		Location location = service.obtemPor(1);
+		assertEquals(location, location1());
+	}
+	
 }

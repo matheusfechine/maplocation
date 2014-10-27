@@ -3,7 +3,6 @@ package br.com.maplocation.controller;
 import java.util.Date;
 import java.util.List;
 
-import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -24,8 +23,7 @@ public class LocationController {
 		this.locationService = locationService;
 	}
 	
-	@Post
-	@Path("/cadastra")
+	@Post("/cadastra")
 	public void cadastra(Location location) {
 		location.setCreated(new Date());
 		locationService.cadastra(location);
@@ -33,37 +31,41 @@ public class LocationController {
 		result.redirectTo(this).paginaDeCadastro();
 	}
 
-	@Get
-	@Path("/")
+	@Get("/")
 	public void paginaDeCadastro() {
 	}
 
-	@Get
-	@Path("/lista")
+	@Get("/lista")
 	public void lista() {
 		List<Location> locations = locationService.lista();
 		result.include("locations", locations);
 		
 	}
 
-	@Get
-	@Path("/paginaListagem")
+	@Get("/paginaListagem")
 	public void paginaDeListagem() {
 		lista();
 	}
 
-	@Get
-	@Path("/atualiza")
-	public void atualiza(Location location) {
-		locationService.atualiza(location);
-		result.include("sucesso", "Location Atualizado com Sucesso!");
+	@Get("/paginaAtualizacao/{id}")
+	public void paginaDeAtualizacao(Integer id) {
+		Location location = locationService.obtemPor(id);
+		result.include("location", location);
 	}
 
-	@Delete
-	@Path("/exclui/{id}")
+	@Post("/atualiza")
+	public void atualiza(Location location) {
+		location.setCreated(new Date());
+		locationService.atualiza(location);
+		result.include("sucesso", "Location Atualizado com Sucesso!");
+		result.redirectTo(this).paginaDeListagem();
+	}
+
+	@Get("/exclui/{id}")
 	public void exclui(Integer id) {
 		locationService.exclui(id);
 		result.include("sucesso", "Location Excluído com Sucesso!");
+		result.redirectTo(this).paginaDeListagem();
 	}
 
 }

@@ -52,7 +52,7 @@ public class LocationControllerTest {
 	public void deveriaChamarPaginaDeListagem(){
 		controller.paginaDeListagem();
 	}
-	
+
 	@Test
 	public void deveriaListarTodasAsLocations(){
 		when(service.lista()).thenReturn(Lists.newArrayList(location()));
@@ -74,4 +74,13 @@ public class LocationControllerTest {
 		verify(service).exclui(1);
 		assertEquals("Location Excluído com Sucesso!", result.included().get("sucesso"));
 	}
+	
+	@Test
+	public void deveriaChamarPaginaDeAtualizacao(){
+		when(service.obtem(any(Location.class))).thenReturn(location());
+		controller.paginaDeAtualizacao(1);
+		assertEquals(location(), result.included().get("location"));
+		
+	}
+	
 }
