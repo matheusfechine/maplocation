@@ -66,6 +66,7 @@ public class LocationServiceTest {
 		assertEquals("Data", dateFormat.format(asDate("25/10/2014 00:00:00")), dateFormat.format(locations.get(0).getCreated()));
 		assertEquals("Data", dateFormat.format(asDate("25/10/2014 01:00:00")), dateFormat.format(locations.get(1).getCreated()));
 	}
+	
 	public Date asDate(String valor) {
 		try {
 			return new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(valor);
@@ -73,6 +74,7 @@ public class LocationServiceTest {
 			return null;
 		}
 	}
+	
 	private Location location1() {
 		Location location = new Location();
 		location.setId(1);

@@ -77,7 +77,7 @@ public class LocationControllerTest {
 	
 	@Test
 	public void deveriaChamarPaginaDeAtualizacao(){
-		when(service.obtem(any(Location.class))).thenReturn(location());
+		when(service.obtemPor(anyInt())).thenReturn(location());
 		controller.paginaDeAtualizacao(1);
 		assertEquals(location(), result.included().get("location"));
 		

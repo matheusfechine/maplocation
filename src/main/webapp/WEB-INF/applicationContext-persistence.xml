@@ -33,7 +33,7 @@
 			<bean
 				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 				<property name="showSql" value="true" />
-				<property name="databasePlatform" value="org.hibernate.dialect.MySQLInnoDBDialect" />
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			</bean>
 		</property>
 		<property name="jpaProperties">
@@ -41,7 +41,7 @@
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.query.substitutions">true 'S',false 'N',yes 'S',no 'N'</prop>
 				<prop key="hibernate.query.jpaql_strict_compliance">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop> 
+				<prop key="hibernate.hbm2ddl.auto">create</prop> 
 			</props>
 		</property>
 	</bean>
