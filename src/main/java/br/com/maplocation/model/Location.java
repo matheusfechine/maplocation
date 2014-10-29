@@ -8,34 +8,36 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="location")
+@Table(name = "location")
 public class Location {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
-	@Column(name="latitude")
+
+	@Column(name = "latitude")
 	private Double latitude;
-	
-	@Column(name="longitude")
+
+	@Column(name = "longitude")
 	private Double longitude;
-	
-	@Column(name="nome")
+
+	@Column(name = "nome")
 	private String name;
-	
-	@Column(name="created")
+
+	@Column(name = "created")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 
 	@OneToMany
+	@JoinTable(name="location_tag")
 	private List<Tag> tags;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -76,10 +78,18 @@ public class Location {
 		this.created = created;
 	}
 
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
 	@Override
 	public String toString() {
 		return "Location [latitude=" + latitude + ", longitude=" + longitude
-				+ ", name=" + name + "]";
+				+ ", name=" + name + ", tags=" + tags + "]";
 	}
 
 	@Override
@@ -91,6 +101,7 @@ public class Location {
 		result = prime * result
 				+ ((longitude == null) ? 0 : longitude.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
 		return result;
 	}
 
@@ -117,6 +128,11 @@ public class Location {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (tags == null) {
+			if (other.tags != null)
+				return false;
+		} else if (!tags.equals(other.tags))
 			return false;
 		return true;
 	}

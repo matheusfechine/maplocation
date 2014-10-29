@@ -38,4 +38,9 @@ public class TagControllerTest {
 		return tag;
 	}
 	
+	@Test
+	public void deveriaChamarPaginaDeCadastro(){
+		controller.paginaDeCadastro();
+	}
+	
 }

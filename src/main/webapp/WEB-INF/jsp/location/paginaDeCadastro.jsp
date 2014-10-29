@@ -9,9 +9,16 @@
 		<section>
 		<c:out value="${sucesso}"></c:out>
 			<form action="<c:url value='/location/cadastra'/>" method="post">
-				<div>Nome: <input type="text" size="10" id="latitude" name="location.name"></div>
-				<div>Latitude: <input type="text" size="10" id="latitude" name="location.latitude"></div>
-				<div>Longitude: <input type="text" size="10" id="longitude" name="location.longitude"></div>
+				<div>Nome: <input type="text" size="10" id="latitude" name="location.name"/></div>
+				<div>Latitude: <input type="text" size="10" id="latitude" name="location.latitude"/></div>
+				<div>Longitude: <input type="text" size="10" id="longitude" name="location.longitude"/></div>
+				<div>Tag: 
+					<select name="location.tags[].id">
+						<c:forEach var="tag" items="${tags}">
+							<option value="${tag.id}">${tag.name}</option>
+						</c:forEach>
+					</select>
+				</div>
 				<div><input type="submit" value="Salvar"></div>
 			</form>
 		</section>

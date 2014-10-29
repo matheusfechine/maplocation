@@ -10,6 +10,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.maplocation.model.Location;
 import br.com.maplocation.service.LocationService;
+import br.com.maplocation.service.TagService;
 
 @Resource
 @Path("/location")
@@ -17,10 +18,12 @@ public class LocationController {
 
 	private Result result;
 	private LocationService locationService;
+	private TagService tagService;
 	
-	public LocationController(Result result, LocationService locationService) {
+	public LocationController(Result result, LocationService locationService, TagService tagService) {
 		this.result = result;
 		this.locationService = locationService;
+		this.tagService = tagService;
 	}
 	
 	@Post("/cadastra")
@@ -33,6 +36,7 @@ public class LocationController {
 
 	@Get("/")
 	public void paginaDeCadastro() {
+		result.include("tags", tagService.lista());
 	}
 
 	@Get("/lista")
@@ -50,6 +54,7 @@ public class LocationController {
 	@Get("/paginaAtualizacao/{id}")
 	public void paginaDeAtualizacao(Integer id) {
 		Location location = locationService.obtemPor(id);
+		result.include("tags", tagService.lista());
 		result.include("location", location);
 	}
 

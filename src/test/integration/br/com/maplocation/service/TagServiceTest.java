@@ -14,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 import br.com.maplocation.model.Tag;
 import dbunit.DbUnitManager;
 
@@ -67,4 +69,10 @@ public class TagServiceTest {
 		tag.setName("TAG1");
 		return tag;
 	}
+	
+	@Test
+	public void deveriaListarTodasAsTags(){
+		assertEquals(Lists.newArrayList(tag()), service.lista());
+	}
+	
 }

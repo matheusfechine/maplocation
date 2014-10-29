@@ -12,27 +12,38 @@ import com.google.common.collect.Lists;
 
 import br.com.caelum.vraptor.util.test.MockResult;
 import br.com.maplocation.model.Location;
+import br.com.maplocation.model.Tag;
 import br.com.maplocation.service.LocationService;
+import br.com.maplocation.service.TagService;
 
 public class LocationControllerTest {
 
 	private LocationController controller;
 	private MockResult result;
 	@Mock private LocationService service;
+	@Mock private TagService tagService;
 	
 	@Before
 	public void setUp(){
 		MockitoAnnotations.initMocks(this);
 		result = new MockResult();
-		controller = new LocationController(result, service);
+		controller = new LocationController(result, service, tagService);
 	
 	}
 	
 	@Test
 	public void deveriaChamarPaginaDeCadastro(){
+		when(tagService.lista()).thenReturn(Lists.newArrayList(tag()));
 		controller.paginaDeCadastro();
+		assertEquals(Lists.newArrayList(tag()), result.included().get("tags"));
 	}
 	
+	private Tag tag() {
+		Tag tag = new Tag();
+		tag.setName("TAG1");
+		return tag;
+	}
+
 	@Test
 	public void deveriaCadastrarUmaLocation(){
 		controller.cadastra(location());
@@ -78,8 +89,10 @@ public class LocationControllerTest {
 	@Test
 	public void deveriaChamarPaginaDeAtualizacao(){
 		when(service.obtemPor(anyInt())).thenReturn(location());
+		when(tagService.lista()).thenReturn(Lists.newArrayList(tag()));
 		controller.paginaDeAtualizacao(1);
 		assertEquals(location(), result.included().get("location"));
+		assertEquals(Lists.newArrayList(tag()), result.included().get("tags"));
 		
 	}
 	

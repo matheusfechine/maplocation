@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 import br.com.maplocation.model.Location;
+import br.com.maplocation.model.Tag;
 import dbunit.DbUnitManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,14 +56,23 @@ public class LocationServiceTest {
 		location.setLongitude(23232D);
 		location.setName("Teste");
 		location.setCreated(asDate("25/10/2014 00:00:00"));
+		location.setTags(Lists.newArrayList(tag3()));
 		return location;
 	}
+
+	private Tag tag3() {
+		Tag tag = new Tag();
+		tag.setName("TAG3");
+		tag.setCreated(asDate("25/10/2014 11:00:00"));
+		return tag;
+	}
+
 
 	@Test
 	public void deveriaListarTodasAsLocations(){
 		List<Location> locations = service.lista();
 		assertEquals(2, locations.size());
-		assertEquals(Lists.newArrayList(location1(), location2()), locations);
+		assertEquals(Lists.newArrayList(location1(), location2()).toString(), locations.toString());
 		assertEquals("Data", dateFormat.format(asDate("25/10/2014 00:00:00")), dateFormat.format(locations.get(0).getCreated()));
 		assertEquals("Data", dateFormat.format(asDate("25/10/2014 01:00:00")), dateFormat.format(locations.get(1).getCreated()));
 	}
@@ -81,18 +91,36 @@ public class LocationServiceTest {
 		location.setLatitude(3.222D);
 		location.setLongitude(2.222D);
 		location.setName("Teste 1");
+		location.setTags(Lists.newArrayList(tag1()));
 		return location;
 	}
 	
+	private Tag tag1() {
+		Tag tag = new Tag();
+		tag.setId(1);
+		tag.setName("TAG1");
+		tag.setCreated(asDate("25/10/2014 11:00:00"));
+		return tag;
+	}
+
+
 	private Location location2() {
 		Location location = new Location();
 		location.setId(2);
 		location.setLatitude(4.444D);
 		location.setLongitude(5.555D);
 		location.setName("Teste 2");
+		location.setTags(Lists.newArrayList(tag2()));
 		return location;
 	}
 
+	private Tag tag2() {
+		Tag tag = new Tag();
+		tag.setName("TAG2");
+		tag.setCreated(asDate("25/10/2014 11:00:00"));
+		return tag;
+	}
+	
 	@Test
 	public void deveriaAtualizarUmaLocation(){
 		Location location = location();
@@ -100,6 +128,7 @@ public class LocationServiceTest {
 		location.setLongitude(3.1234D);
 		location.setName("ATUALIZADO");
 		location.setCreated(asDate("25/10/2014 10:00:01"));
+		location.setTags(Lists.newArrayList(tag2()));
 		service.atualiza(location);
 		Location locationAtualizada = service.obtem(location);
 		assertEquals(location, locationAtualizada);
@@ -113,14 +142,14 @@ public class LocationServiceTest {
 		service.exclui(location1().getId());
 		todasLocations = service.lista();
 		assertEquals(1, todasLocations.size());
-		assertEquals(todasLocations, Lists.newArrayList(location2()));
+		assertEquals(todasLocations.toString(), Lists.newArrayList(location2()).toString());
 		assertEquals("Data", dateFormat.format(asDate("25/10/2014 01:00:00")), dateFormat.format(todasLocations.get(0).getCreated()));
 	}
 	
 	@Test
 	public void deveriaPesquisarPorId(){
 		Location location = service.obtemPor(1);
-		assertEquals(location, location1());
+		assertEquals(location1(), location);
 	}
 	
 }

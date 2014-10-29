@@ -41,7 +41,7 @@
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.query.substitutions">true 'S',false 'N',yes 'S',no 'N'</prop>
 				<prop key="hibernate.query.jpaql_strict_compliance">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">create</prop> 
+				<prop key="hibernate.hbm2ddl.auto">update</prop> 
 			</props>
 		</property>
 	</bean>
