@@ -23,8 +23,8 @@
 			</form>
 		</section>
 	</div>
+	
+	<script type='text/javascript' src='${ctx}/javascripts/location/paginaCadastro.js'></script>
 
-	<script type='text/javascript' src='${ctx}/javascripts/utils/spin.js'></script>
-	<script type='text/javascript' src='${ctx}/javascripts/paginaDeRegras/paginaDeRegras.js'></script>
 </body>
 </html>

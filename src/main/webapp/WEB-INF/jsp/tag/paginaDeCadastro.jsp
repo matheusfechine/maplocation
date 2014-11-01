@@ -15,7 +15,7 @@
 		</section>
 	</div>
 
-	<script type='text/javascript' src='${ctx}/javascripts/utils/spin.js'></script>
-	<script type='text/javascript' src='${ctx}/javascripts/paginaDeRegras/paginaDeRegras.js'></script>
+<%-- 	<script type='text/javascript' src='${ctx}/javascripts/utils/spin.js'></script> --%>
+	<script type='text/javascript' src='${ctx}/javascripts/tag/paginaCadastro.js'></script>
 </body>
 </html>

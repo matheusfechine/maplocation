@@ -1,6 +1,8 @@
 package br.com.maplocation.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -8,26 +10,31 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.google.common.collect.Lists;
-
-import br.com.caelum.vraptor.util.test.MockResult;
+import br.com.caelum.vraptor.util.test.MockSerializationResult;
+import br.com.maplocation.controller.util.JsonSerializer;
+import br.com.maplocation.geocoder.GeocoderAddress;
 import br.com.maplocation.model.Location;
 import br.com.maplocation.model.Tag;
 import br.com.maplocation.service.LocationService;
 import br.com.maplocation.service.TagService;
 
+import com.google.common.collect.Lists;
+
 public class LocationControllerTest {
 
 	private LocationController controller;
-	private MockResult result;
+	private MockSerializationResult result;
 	@Mock private LocationService service;
 	@Mock private TagService tagService;
+	@Mock private GeocoderAddress address;
+	private JsonSerializer serializer;
 	
 	@Before
 	public void setUp(){
 		MockitoAnnotations.initMocks(this);
-		result = new MockResult();
-		controller = new LocationController(result, service, tagService);
+		serializer = new JsonSerializer();
+		result = new MockSerializationResult();
+		controller = new LocationController(result, service, tagService, address);
 	
 	}
 	
@@ -93,7 +100,20 @@ public class LocationControllerTest {
 		controller.paginaDeAtualizacao(1);
 		assertEquals(location(), result.included().get("location"));
 		assertEquals(Lists.newArrayList(tag()), result.included().get("tags"));
-		
 	}
 	
+	@Test
+	public void deveriaObterUmaLocationViaJSon() throws Exception{
+		when(service.obtemPor(anyInt())).thenReturn(location());
+		controller.obtemPor(1);
+		assertEquals(serializer.serialize("location", location()), result.serializedResult());
+	}
+	
+	@Test
+	public void deveriaRetornarEnderecoPorLatLong() throws Exception{
+		when(address.getAddress(anyDouble(), anyDouble())).thenReturn("Endereco");
+		controller.obtemEnderecoPor(111.11, 222.22);
+		assertEquals(serializer.serialize("address", "Endereco"), result.serializedResult());
+		
+	}
 }

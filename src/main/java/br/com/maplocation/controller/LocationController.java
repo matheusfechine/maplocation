@@ -8,6 +8,8 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.view.Results;
+import br.com.maplocation.geocoder.GeocoderAddress;
 import br.com.maplocation.model.Location;
 import br.com.maplocation.service.LocationService;
 import br.com.maplocation.service.TagService;
@@ -19,11 +21,13 @@ public class LocationController {
 	private Result result;
 	private LocationService locationService;
 	private TagService tagService;
+	private GeocoderAddress geocodeAddress;
 	
-	public LocationController(Result result, LocationService locationService, TagService tagService) {
+	public LocationController(Result result, LocationService locationService, TagService tagService, GeocoderAddress geocodeAddress) {
 		this.result = result;
 		this.locationService = locationService;
 		this.tagService = tagService;
+		this.geocodeAddress = geocodeAddress;
 	}
 	
 	@Post("/cadastra")
@@ -71,6 +75,24 @@ public class LocationController {
 		locationService.exclui(id);
 		result.include("sucesso", "Location Excluído com Sucesso!");
 		result.redirectTo(this).paginaDeListagem();
+	}
+
+	@Get("/obtem/{id}")
+	public void obtemPor(Integer id) {
+		Location location = locationService.obtemPor(id);
+		result.use(Results.json()).from(location, "location").serialize();
+	}
+
+	@Get("/getAddress")
+	public void obtemEnderecoPor(Double latitude, Double longitude) {
+		String address="";
+		try {
+			address = geocodeAddress.getAddress(latitude, longitude);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		result.use(Results.json()).from(address, "address").serialize();
+		
 	}
 
 }

@@ -10,14 +10,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<decorator:title>Map Location</decorator:title>
-<%-- 		<%@include file="/decorators/css.jsp"%> --%>
-<%-- 		<%@include file="/decorators/javascript.jsp"%> --%>
+		<%@include file="/decorators/css.jsp"%>
+		<%@include file="/decorators/javascript.jsp"%>
 		<decorator:head></decorator:head>
 	</head>
 	<body>
 		
-<%-- 		<%@include file="/decorators/header.jsp"%> --%>
-		<div class="container-fluid">
+		<%@include file="/decorators/header.jsp"%>
+		<div>
 			<decorator:body></decorator:body>
 		</div>
 	</body>
