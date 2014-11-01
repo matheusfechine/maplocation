@@ -9,6 +9,7 @@
 		<section>
 		<div><select id="selectLocation">
 				<c:forEach var="location" items="${locations}">
+					<option value="">Selecione...</option>
 					<option value="${location.id}">${location.name}</option>
 				</c:forEach>
 			</select>

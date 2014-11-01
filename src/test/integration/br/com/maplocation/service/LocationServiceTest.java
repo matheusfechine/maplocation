@@ -1,6 +1,6 @@
 package br.com.maplocation.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,10 +15,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-
 import br.com.maplocation.model.Location;
 import br.com.maplocation.model.Tag;
+
+import com.google.common.collect.Lists;
+
 import dbunit.DbUnitManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,6 +34,9 @@ public class LocationServiceTest {
 	@Autowired
 	private LocationService service;
 	
+	@Autowired
+	private TagService tagService;
+	
 	@Autowired 
 	private DbUnitManager manager;
 	
@@ -44,9 +48,12 @@ public class LocationServiceTest {
 	
 	@Test
 	public void deveriaCadastrarUmaLocation(){
-		service.cadastra(location());
-		Location location = service.obtem(location());
-		assertEquals(location(), location);
+		Tag tag1 = tagService.obtemPor(1);
+		Location location = location();
+		location.setTags(Lists.newArrayList(tag1));
+		service.cadastra(location);
+		Location locationEsperada = service.obtem(location);
+		assertEquals(location, locationEsperada);
 		assertEquals("Data", dateFormat.format(asDate("25/10/2014 00:00:00")), dateFormat.format(location.getCreated()));
 	}
 
@@ -56,17 +63,8 @@ public class LocationServiceTest {
 		location.setLongitude(23232D);
 		location.setName("Teste");
 		location.setCreated(asDate("25/10/2014 00:00:00"));
-		location.setTags(Lists.newArrayList(tag3()));
 		return location;
 	}
-
-	private Tag tag3() {
-		Tag tag = new Tag();
-		tag.setName("TAG3");
-		tag.setCreated(asDate("25/10/2014 11:00:00"));
-		return tag;
-	}
-
 
 	@Test
 	public void deveriaListarTodasAsLocations(){
@@ -123,12 +121,13 @@ public class LocationServiceTest {
 	
 	@Test
 	public void deveriaAtualizarUmaLocation(){
+		Tag tag2 = tagService.obtemPor(2);
 		Location location = location();
 		location.setLatitude(2.111D);
 		location.setLongitude(3.1234D);
 		location.setName("ATUALIZADO");
 		location.setCreated(asDate("25/10/2014 10:00:01"));
-		location.setTags(Lists.newArrayList(tag2()));
+		location.setTags(Lists.newArrayList(tag2));
 		service.atualiza(location);
 		Location locationAtualizada = service.obtem(location);
 		assertEquals(location, locationAtualizada);
