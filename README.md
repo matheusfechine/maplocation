@@ -9,3 +9,5 @@ Para criar a Base de Dados automaticamente mudar em applicationContext-persisten
 prop key="hibernate.hbm2ddl.auto" update prop
 
 O mesmo é necessário para configurar o banco de Teste no source /src/test/resource no arquivo applicationContext-persistence.xml
+
+Banco de Dados: MySQL
