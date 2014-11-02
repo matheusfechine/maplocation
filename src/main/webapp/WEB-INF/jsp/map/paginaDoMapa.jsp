@@ -8,8 +8,8 @@
 		<h1>Mapa</h1>
 		<section>
 		<div><select id="selectLocation">
-				<c:forEach var="location" items="${locations}">
 					<option value="">Selecione...</option>
+				<c:forEach var="location" items="${locations}">
 					<option value="${location.id}">${location.name}</option>
 				</c:forEach>
 			</select>

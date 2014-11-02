@@ -14,11 +14,33 @@
 				<div>Latitude: <input type="text" size="10" id="latitude" name="location.latitude" value="${location.latitude}"></div>
 				<div>Longitude: <input type="text" size="10" id="longitude" name="location.longitude" value="${location.longitude}"></div>
 				<div>Tag: 
-					<select name="location.tags[].id">
+					<select id="selectTags">
 						<c:forEach var="tag" items="${tags}">
 							<option value="${tag.id}">${tag.name}</option>
 						</c:forEach>
 					</select>
+				</div>
+				<div><input id="btnAdicionar" type="button" value="Adicionar"></div>
+				<div>
+					<table id="tabelaDeTags">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Name</th>
+								<th>Acao</th>
+							</tr>
+						</thead>
+						<tbody>
+						<c:set var="count" value="0" scope="page" />
+						<c:forEach items="${location.tags}" var="tag">
+						<tr>
+							<td><input type="hidden" value="${tag.id}" name="location.tags[].id"/>${tag.id}</td>
+							<td><input type="hidden" value="${tag.name}" name="location.tags[].name"/>${tag.name}</td>
+							<td><a href='#' onclick="removeRow(this)">Excluir</a></td>
+						</tr>
+						</c:forEach>
+						</tbody>
+					</table>
 				</div>
 				<div><input type="submit" value="Salvar"></div>
 			</form>

@@ -7,6 +7,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.view.Results;
 import br.com.maplocation.model.Tag;
 import br.com.maplocation.service.TagService;
 
@@ -32,6 +33,12 @@ public class TagController {
 
 	@Get("/paginaCadastro")
 	public void paginaDeCadastro() {
+	}
+
+	@Get("/obtem/{id}")
+	public void obtemPor(Integer id) {
+		Tag tag = service.obtemPor(id);
+		result.use(Results.json()).from(tag, "tag").serialize();
 	}
 
 }

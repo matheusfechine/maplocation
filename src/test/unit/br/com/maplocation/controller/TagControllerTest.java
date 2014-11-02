@@ -1,27 +1,33 @@
 package br.com.maplocation.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.caelum.vraptor.util.test.MockResult;
+import br.com.caelum.vraptor.util.test.MockSerializationResult;
+import br.com.maplocation.controller.util.JsonSerializer;
 import br.com.maplocation.model.Tag;
 import br.com.maplocation.service.TagService;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class TagControllerTest {
 
 	private TagController controller;
-	private MockResult result;
+	private MockSerializationResult result;
 	@Mock 
 	private TagService service;
+	
+	private JsonSerializer serializer;
 	
 	@Before
 	public void setUp(){
 		MockitoAnnotations.initMocks(this);
-		result = new MockResult();
+		serializer = new JsonSerializer();
+		result = new MockSerializationResult();
 		controller = new TagController(result, service);
 	}
 	
@@ -43,4 +49,11 @@ public class TagControllerTest {
 		controller.paginaDeCadastro();
 	}
 	
+	@Test
+	public void deveriaBuscarTagPorId() throws Exception{
+		when(service.obtemPor(anyInt())).thenReturn(tag());
+		controller.obtemPor(1);
+		assertEquals(serializer.serialize("tag", tag()), result.serializedResult());
+
+	}
 }
